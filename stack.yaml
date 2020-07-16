@@ -1,0 +1,23 @@
+---
+resolver: lts-16.5
+packages:
+  - .
+nix:
+  enable: true
+  pure: false
+  packages:
+    - cairo
+    - gcc
+    - gnome2.pango
+    - gtk2-x11
+    - libxml2
+    - pkgconfig
+    - upower
+    - x11
+    - xorg.libX11
+    - xorg.libXext
+    - xorg.libXinerama
+    - xorg.libXrandr
+    - xorg.libXrender
+    - xorg.libXScrnSaver
+  

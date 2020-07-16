@@ -1,0 +1,14 @@
+---
+name: "xmonad-djanatyn"
+
+dependencies:
+  - base
+  - containers
+  - xmonad
+  - xmonad-contrib
+
+executables:
+  xmonad-djanatyn:
+    source-dirs:
+      - .
+    main: xmonad.hs
