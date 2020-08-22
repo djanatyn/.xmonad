@@ -2,6 +2,7 @@
 -- TODO: add pass prompt
 -- TODO: navigate window layouts with gridselect
 import Data.Tree
+import Graphics.X11.ExtraTypes.XF86
 import System.IO
 import XMonad
 import XMonad.Actions.CycleWS ()
@@ -54,6 +55,8 @@ extraKeys =
     ((mod1Mask .|. shiftMask, xK_f), bringSelected def),
     ((mod1Mask, xK_p), spawn "rofi -show run -theme 'Arc-Dark'"),
     ((mod1Mask, xK_p), spawn "rofi -show run -theme 'Arc-Dark'"),
+    ((mod1Mask, xF86XK_Tools), spawn "amixer set Capture nocap"),
+    ((mod1Mask, xF86XK_Launch5), spawn "amixer set Capture cap"),
     ((mod1Mask, xK_o), xmonadPrompt def),
     ((mod1Mask .|. shiftMask, xK_p), spawn "rofi -show window -theme 'Arc-Dark'"),
     ((mod1Mask .|. shiftMask, xK_t), sendMessage ToggleStruts)
