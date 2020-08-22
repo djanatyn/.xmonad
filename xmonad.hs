@@ -1,3 +1,6 @@
+-- TODO: prompt for terminal name before launching
+-- TODO: add pass prompt
+-- TODO: navigate window layouts with gridselect
 import Data.Tree
 import System.IO
 import XMonad
@@ -13,6 +16,7 @@ import XMonad.Layout.Circle (Circle (..))
 import XMonad.Layout.Column
 import XMonad.Layout.Spacing (Border (..), spacingRaw)
 import XMonad.Layout.Tabbed
+import XMonad.Prompt.XMonad
 import qualified XMonad.StackSet as W
 import XMonad.Util.EZConfig
 import XMonad.Util.Loggers
@@ -44,11 +48,13 @@ myTreeConf =
 
 extraKeys :: [((KeyMask, KeySym), X ())]
 extraKeys =
-  [ ((mod1Mask, xK_f), treeselectWorkspace myTreeConf myWorkspaces W.greedyView),
-    -- ((mod1Mask, xK_f), gridselectWorkspace W.view), -- goToSelected defaultGSConfig),
+  [ -- ((mod1Mask, xK_f), treeselectWorkspace myTreeConf myWorkspaces W.greedyView),
+    ((mod1Mask, xK_f), gridselectWorkspace def W.greedyView), -- goToSelected defaultGSConfig),
     ((mod1Mask .|. shiftMask, xK_f), treeselectWorkspace myTreeConf myWorkspaces W.shift),
     ((mod1Mask .|. shiftMask, xK_f), bringSelected def),
     ((mod1Mask, xK_p), spawn "rofi -show run -theme 'Arc-Dark'"),
+    ((mod1Mask, xK_p), spawn "rofi -show run -theme 'Arc-Dark'"),
+    ((mod1Mask, xK_o), xmonadPrompt def),
     ((mod1Mask .|. shiftMask, xK_p), spawn "rofi -show window -theme 'Arc-Dark'"),
     ((mod1Mask .|. shiftMask, xK_t), sendMessage ToggleStruts)
   ]
@@ -60,28 +66,29 @@ main = do
   spawn "compton"
   -- spawn "bash ~/.screenlayout/default.sh"
   xmonad $
-    ewmh
+    ewmh $
       def
-        { manageHook = manageDocks <+> manageHook defaultConfig,
-          workspaces = toWorkspaces myWorkspaces,
-          logHook =
+        { logHook =
             dynamicLogWithPP $
               xmobarPP
                 { ppOutput = hPutStrLn xmobarProc,
                   ppExtras = [loadAvg, battery],
                   ppSort = getSortByXineramaRule
                 },
+          manageHook = manageDocks <+> manageHook def,
+          workspaces = toWorkspaces myWorkspaces,
           layoutHook =
-            avoidStruts $ spacingRaw True (Border 0 5 5 5) True (Border 5 5 5 5) True $
-              emptyBSP
-                ||| tabbed shrinkText (theme smallClean)
-                ||| Column (10 / 7)
-                ||| Full,
-          handleEventHook = handleEventHook defaultConfig <+> docksEventHook,
+            avoidStruts $
+              spacingRaw True (Border 0 5 5 5) True (Border 5 5 5 5) True $
+                emptyBSP
+                  ||| tabbed shrinkText (theme smallClean)
+                  ||| Column (10 / 7)
+                  ||| Full,
+          handleEventHook = handleEventHook def <+> docksEventHook,
           borderWidth = 1,
           terminal = "urxvt",
           normalBorderColor = "#053569",
           focusedBorderColor = "#0954B5",
           focusFollowsMouse = False
         }
-      `additionalKeys` extraKeys
+        `additionalKeys` extraKeys
