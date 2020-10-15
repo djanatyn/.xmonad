@@ -12,11 +12,14 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.WorkspaceHistory ()
-import XMonad.Layout.BinarySpacePartition (emptyBSP)
 import XMonad.Layout.Circle (Circle (..))
 import XMonad.Layout.Column
+import XMonad.Layout.Grid
+import XMonad.Layout.Roledex
 import XMonad.Layout.Spacing (Border (..), spacingRaw)
 import XMonad.Layout.Tabbed
+import XMonad.Layout.ThreeColumns
+import XMonad.Prompt.Input
 import XMonad.Prompt.XMonad
 import qualified XMonad.StackSet as W
 import XMonad.Util.EZConfig
@@ -36,31 +39,24 @@ myWorkspaces =
     Node "music" []
   ]
 
-myTreeConf :: TSConfig a
-myTreeConf =
-  tsDefaultConfig
-    { ts_font = "xft:Terminess Powerline",
-      ts_background = 0xc0c5d0da,
-      ts_node = (0xff0d0931, 0xff3cbff0),
-      ts_nodealt = (0xffffffff, 0xff0d0931),
-      ts_highlight = (0xffffffff, 0xffE72478),
-      ts_extra = 0xff000000
-    }
-
 extraKeys :: [((KeyMask, KeySym), X ())]
 extraKeys =
-  [ -- ((mod1Mask, xK_f), treeselectWorkspace myTreeConf myWorkspaces W.greedyView),
-    ((mod1Mask, xK_f), gridselectWorkspace def W.greedyView), -- goToSelected defaultGSConfig),
-    ((mod1Mask .|. shiftMask, xK_f), treeselectWorkspace myTreeConf myWorkspaces W.shift),
+  [ ((mod1Mask, xK_f), gridselectWorkspace def W.greedyView),
     ((mod1Mask .|. shiftMask, xK_f), bringSelected def),
+    ((mod1Mask .|. shiftMask, xK_Return), namedTerminal),
     ((mod1Mask, xK_p), spawn "rofi -show run -theme 'Arc-Dark'"),
-    ((mod1Mask, xK_p), spawn "rofi -show run -theme 'Arc-Dark'"),
-    ((mod1Mask, xF86XK_Tools), spawn "amixer set Capture nocap"),
-    ((mod1Mask, xF86XK_Launch5), spawn "amixer set Capture cap"),
-    ((mod1Mask, xK_o), xmonadPrompt def),
     ((mod1Mask .|. shiftMask, xK_p), spawn "rofi -show window -theme 'Arc-Dark'"),
-    ((mod1Mask .|. shiftMask, xK_t), sendMessage ToggleStruts)
+    ((mod1Mask .|. shiftMask, xK_t), sendMessage ToggleStruts),
+    ((mod1Mask, xF86XK_Tools), spawn "pactl set-source-mute alsa_input.usb-Logitech_G533_Gaming_Headset-00.mono-fallback 1"),
+    ((mod1Mask, xF86XK_Launch5), spawn "pactl set-source-mute alsa_input.usb-Logitech_G533_Gaming_Headset-00.mono-fallback 0")
   ]
+
+namedTerminal :: X ()
+namedTerminal = do
+  name <- inputPrompt def "name?"
+  maybe (pure ()) launch name
+  where
+    launch name = spawn $ "urxvt -title " ++ name
 
 main :: IO ()
 main = do
@@ -83,10 +79,12 @@ main = do
           layoutHook =
             avoidStruts $
               spacingRaw True (Border 0 5 5 5) True (Border 5 5 5 5) True $
-                emptyBSP
-                  ||| tabbed shrinkText (theme smallClean)
+                tabbed shrinkText (theme smallClean)
+                  ||| Roledex
                   ||| Column (10 / 7)
-                  ||| Full,
+                  ||| Tall 1 (3 / 100) (1 / 2)
+                  ||| Full
+                  ||| Grid,
           handleEventHook = handleEventHook def <+> docksEventHook,
           borderWidth = 1,
           terminal = "urxvt",
