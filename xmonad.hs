@@ -102,30 +102,34 @@ main = do
   -- spawn "bash ~/.screenlayout/default.sh"
   xmonad $
     ewmh $
-      def
-        { logHook =
-            composeAll
-              [ fadeWindowsLogHook myFadeHook,
-                dynamicLogWithPP $
-                  xmobarPP
-                    { ppOutput = hPutStrLn xmobarProc,
-                      ppExtras = [loadAvg, battery],
-                      ppSort = getSortByXineramaRule
-                    }
-              ],
-          manageHook = manageDocks <+> manageHook def,
-          workspaces = toWorkspaces myWorkspaces,
-          layoutHook = defaultLayout,
-          handleEventHook =
-            composeAll
-              [ handleEventHook def,
-                docksEventHook,
-                fadeWindowsEventHook
-              ],
-          borderWidth = 1,
-          terminal = "urxvt",
-          normalBorderColor = "#264653",
-          focusedBorderColor = "#2a9d8f",
-          focusFollowsMouse = False
-        }
-        `additionalKeys` extraKeys
+      dynamicProjects myProjects $
+        (defaults xmobarProc)
+          `additionalKeys` extraKeys
+
+defaults xmobarProc =
+  def
+    { logHook =
+        composeAll
+          [ fadeWindowsLogHook myFadeHook,
+            dynamicLogWithPP $
+              xmobarPP
+                { ppOutput = hPutStrLn xmobarProc,
+                  ppExtras = [loadAvg, battery],
+                  ppSort = getSortByXineramaRule
+                }
+          ],
+      manageHook = manageDocks <+> manageHook def,
+      workspaces = myWorkspaces,
+      layoutHook = defaultLayout,
+      handleEventHook =
+        composeAll
+          [ handleEventHook def,
+            docksEventHook,
+            fadeWindowsEventHook
+          ],
+      borderWidth = 1,
+      terminal = "urxvt",
+      normalBorderColor = "#264653",
+      focusedBorderColor = "#2a9d8f",
+      focusFollowsMouse = False
+    }
