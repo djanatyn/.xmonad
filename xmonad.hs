@@ -100,13 +100,17 @@ myProjects =
       }
   ]
 
+startupProcs =
+  [ "nitrogen --restore",
+    "compton",
+    "fluxgui"
+  ]
+
 -- Main
 main :: IO ()
 main = do
   xmobarProc <- spawnPipe "xmobar -o"
-  spawn "nitrogen --restore"
-  spawn "compton"
-  -- spawn "bash ~/.screenlayout/default.sh"
+  spawn `traverse` startupProcs
   xmonad $
     ewmh $
       dynamicProjects myProjects $
