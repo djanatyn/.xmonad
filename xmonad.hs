@@ -77,7 +77,7 @@ column = Column (10 / 7)
 
 defaultLayout = avoidStruts $ spacing $ tall ||| Full ||| column
 
--- Projects
+-- Fade
 myFadeHook =
   composeAll
     [ opaque,
