@@ -34,6 +34,7 @@ import qualified XMonad.StackSet as W
 -- Util
 import XMonad.Util.EZConfig
 import XMonad.Util.Loggers
+import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run (spawnPipe)
 import XMonad.Util.Themes
 import XMonad.Util.WorkspaceCompare
@@ -50,6 +51,18 @@ myWorkspaces =
 
 -- PulseAudio Headset
 headsetSink = "alsa_input.usb-Logitech_G533_Gaming_Headset-00.mono-fallback"
+
+-- Scratchpads
+myScratchPads = [NS "mixer" spawnMixer findMixer manageMixer]
+  where
+    spawnMixer = "urxvt -name Pulsemixer -e pulsemixer" -- launch pulsemixer
+    findMixer = resource =? "Pulsemixer" -- its window will be named "pulsemixer"
+    manageMixer = customFloating $ W.RationalRect l t w h -- and the geometry:
+      where
+        h = 0.2
+        w = 0.8
+        t = 0.5 - (h / 2)
+        l = 0.5 - (w / 2)
 
 -- Keybindings
 extraKeys :: [((KeyMask, KeySym), X ())]
@@ -72,6 +85,9 @@ extraKeys =
       [ -- Headset Controls
         ((mod1Mask, xF86XK_Tools), spawn $ "pactl set-source-mute" ++ headsetSink ++ " 1"),
         ((mod1Mask, xF86XK_Launch5), spawn $ "pactl set-source-mute " ++ headsetSink ++ " 0")
+      ],
+      [ -- Scratchpad
+        ((mod1Mask, xK_m), namedScratchpadAction myScratchPads "mixer")
       ]
     ]
 
@@ -167,7 +183,7 @@ defaults xmobarProc =
                   ppSort = getSortByXineramaRule
                 }
           ],
-      manageHook = manageDocks <+> manageHook def,
+      manageHook = manageDocks <+> manageHook def <+> namedScratchpadManageHook myScratchPads,
       workspaces = myWorkspaces,
       layoutHook = myLayout,
       handleEventHook =
