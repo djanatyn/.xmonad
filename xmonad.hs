@@ -47,6 +47,7 @@ myWorkspaces =
     Node "music" []
   ]
 
+-- Keybindings
 extraKeys :: [((KeyMask, KeySym), X ())]
 extraKeys =
   [ ((mod1Mask, xK_f), gridselectWorkspace def W.greedyView),
@@ -66,6 +67,15 @@ namedTerminal = inputPrompt def "terminal name?" >>= launch
     launch (Just name) = spawn $ "urxvt -title " ++ name
     launch Nothing = return ()
 
+-- Layouts
+spacing = spacingRaw True (Border 0 5 5 5) True (Border 5 5 5 5) True
+
+tall = Tall 1 (3 / 100) (1 / 2)
+
+column = Column (10 / 7)
+
+defaultLayout = spacing $ tall ||| Full ||| column
+
 -- Projects
 myFadeHook =
   composeAll
@@ -75,6 +85,7 @@ myFadeHook =
       (className =? "discord") <&&> (isUnfocused) --> opacity 1
     ]
 
+-- Main
 main :: IO ()
 main = do
   xmobarProc <- spawnPipe "xmobar -o"
@@ -85,24 +96,18 @@ main = do
     ewmh $
       def
         { logHook =
-            dynamicLogWithPP $
-              xmobarPP
-                { ppOutput = hPutStrLn xmobarProc,
-                  ppExtras = [loadAvg, battery],
-                  ppSort = getSortByXineramaRule
-                },
+            composeAll
+              [ fadeWindowsLogHook myFadeHook,
+                dynamicLogWithPP $
+                  xmobarPP
+                    { ppOutput = hPutStrLn xmobarProc,
+                      ppExtras = [loadAvg, battery],
+                      ppSort = getSortByXineramaRule
+                    }
+              ],
           manageHook = manageDocks <+> manageHook def,
           workspaces = toWorkspaces myWorkspaces,
-          layoutHook =
-            avoidStruts $
-              spacingRaw True (Border 0 5 5 5) True (Border 5 5 5 5) True $
-                tabbed shrinkText (theme smallClean)
-                  ||| Roledex
-                  ||| Column (10 / 7)
-                  ||| Tall 1 (3 / 100) (1 / 2)
-                  ||| Full
-                  ||| Grid,
-          handleEventHook = handleEventHook def <+> docksEventHook,
+          layoutHook = defaultLayout,
           handleEventHook = handleEventHook def <+> docksEventHook <+> fadeWindowsEventHook,
           borderWidth = 1,
           terminal = "urxvt",
