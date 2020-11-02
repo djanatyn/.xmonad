@@ -96,8 +96,8 @@ main = do
           handleEventHook = handleEventHook def <+> docksEventHook,
           borderWidth = 1,
           terminal = "urxvt",
-          normalBorderColor = "#053569",
-          focusedBorderColor = "#0954B5",
+          normalBorderColor = "#264653",
+          focusedBorderColor = "#2a9d8f",
           focusFollowsMouse = False
         }
         `additionalKeys` extraKeys
