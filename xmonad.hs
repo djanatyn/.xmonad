@@ -81,7 +81,7 @@ myFadeHook =
     [ opaque,
       isUnfocused --> opacity 0.75,
       (className =? "Firefox") <&&> (isUnfocused) --> opacity 0.9,
-      (className =? "discord") <&&> (isUnfocused) --> opacity 1
+      (className =? "discord") --> opacity 0.95
     ]
 
 -- Projects
