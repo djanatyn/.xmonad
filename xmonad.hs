@@ -59,12 +59,12 @@ extraKeys =
     ((mod1Mask, xF86XK_Launch5), spawn "pactl set-source-mute alsa_input.usb-Logitech_G533_Gaming_Headset-00.mono-fallback 0")
   ]
 
+-- Prompt for terminal names
 namedTerminal :: X ()
-namedTerminal = do
-  name <- inputPrompt def "name?"
-  maybe (pure ()) launch name
+namedTerminal = inputPrompt def "terminal name?" >>= launch
   where
-    launch name = spawn $ "urxvt -title " ++ name
+    launch (Just name) = spawn $ "urxvt -title " ++ name
+    launch Nothing = return ()
 
 main :: IO ()
 main = do
