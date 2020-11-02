@@ -84,12 +84,19 @@ myFadeHook =
       (className =? "discord") <&&> (isUnfocused) --> opacity 1
     ]
 
+-- Projects
 myProjects =
   [ Project
       { projectName = "chat",
         projectDirectory = "~/",
         projectStartHook = Just $ do
           spawn "Discord"
+      },
+    Project
+      { projectName = "browse",
+        projectDirectory = "~/",
+        projectStartHook = Just $ do
+          spawn "firefox"
       }
   ]
 
