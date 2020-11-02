@@ -93,6 +93,13 @@ myProjects =
           spawn "Discord"
       },
     Project
+      { projectName = "work",
+        projectDirectory = "~/",
+        projectStartHook = Just $ do
+          spawn "firefox -P work"
+          spawn "urxvt -title 'work terminal'"
+      },
+    Project
       { projectName = "browse",
         projectDirectory = "~/",
         projectStartHook = Just $ do
