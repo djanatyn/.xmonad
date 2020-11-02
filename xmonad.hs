@@ -48,18 +48,32 @@ myWorkspaces =
     "music"
   ]
 
+-- PulseAudio Headset
+headsetSink = "alsa_input.usb-Logitech_G533_Gaming_Headset-00.mono-fallback"
+
 -- Keybindings
 extraKeys :: [((KeyMask, KeySym), X ())]
 extraKeys =
-  [ ((mod1Mask, xK_f), gridselectWorkspace def W.greedyView),
-    ((mod1Mask .|. shiftMask, xK_f), bringSelected def),
-    ((mod1Mask .|. shiftMask, xK_Return), namedTerminal),
-    ((mod1Mask, xK_p), spawn "rofi -show run -theme 'Arc-Dark'"),
-    ((mod1Mask .|. shiftMask, xK_p), spawn "rofi -show window -theme 'Arc-Dark'"),
-    ((mod1Mask .|. shiftMask, xK_t), sendMessage ToggleStruts),
-    ((mod1Mask, xF86XK_Tools), spawn "pactl set-source-mute alsa_input.usb-Logitech_G533_Gaming_Headset-00.mono-fallback 1"),
-    ((mod1Mask, xF86XK_Launch5), spawn "pactl set-source-mute alsa_input.usb-Logitech_G533_Gaming_Headset-00.mono-fallback 0")
-  ]
+  foldr1
+    (++)
+    [ [ -- Workspace Navigation
+        ((mod1Mask, xK_f), gridselectWorkspace def W.greedyView),
+        ((mod1Mask .|. shiftMask, xK_f), bringSelected def)
+      ],
+      [ -- Spawn Programs
+        ((mod1Mask .|. shiftMask, xK_Return), namedTerminal),
+        ((mod1Mask, xK_p), spawn "rofi -show run -theme 'Arc-Dark'"),
+        ((mod1Mask .|. shiftMask, xK_p), spawn "rofi -show window -theme 'Arc-Dark'"),
+        ((mod1Mask, xK_g), spawn "eidolon list | tail -n +3 | rofi -dmenu -theme darker_than_black | cut -d '-' -f 2 | xargs eidolon run")
+      ],
+      [ -- XMonad Config
+        ((mod1Mask .|. shiftMask, xK_t), sendMessage ToggleStruts)
+      ],
+      [ -- Headset Controls
+        ((mod1Mask, xF86XK_Tools), spawn $ "pactl set-source-mute" ++ headsetSink ++ " 1"),
+        ((mod1Mask, xF86XK_Launch5), spawn $ "pactl set-source-mute " ++ headsetSink ++ " 0")
+      ]
+    ]
 
 -- Prompt for terminal names
 namedTerminal :: X ()
