@@ -66,6 +66,15 @@ namedTerminal = inputPrompt def "terminal name?" >>= launch
     launch (Just name) = spawn $ "urxvt -title " ++ name
     launch Nothing = return ()
 
+-- Projects
+myFadeHook =
+  composeAll
+    [ opaque,
+      isUnfocused --> opacity 0.75,
+      (className =? "Firefox") <&&> (isUnfocused) --> opacity 0.9,
+      (className =? "discord") <&&> (isUnfocused) --> opacity 1
+    ]
+
 main :: IO ()
 main = do
   xmobarProc <- spawnPipe "xmobar -o"
@@ -94,6 +103,7 @@ main = do
                   ||| Full
                   ||| Grid,
           handleEventHook = handleEventHook def <+> docksEventHook,
+          handleEventHook = handleEventHook def <+> docksEventHook <+> fadeWindowsEventHook,
           borderWidth = 1,
           terminal = "urxvt",
           normalBorderColor = "#264653",
