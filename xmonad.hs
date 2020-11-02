@@ -96,7 +96,7 @@ myProjects =
       { projectName = "browse",
         projectDirectory = "~/",
         projectStartHook = Just $ do
-          spawn "firefox"
+          spawn "firefox -P default"
       }
   ]
 
