@@ -1,17 +1,23 @@
--- TODO: prompt for terminal name before launching
--- TODO: add pass prompt
 -- TODO: navigate window layouts with gridselect
+
+-- Base
+import Control.Monad (when)
+import Data.Maybe (isJust)
 import Data.Tree
 import Graphics.X11.ExtraTypes.XF86
 import System.IO
 import XMonad
+-- Actions
 import XMonad.Actions.CycleWS ()
 import XMonad.Actions.GridSelect
 import XMonad.Actions.TreeSelect
+-- Hooks
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.FadeWindows
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.WorkspaceHistory ()
+-- Layouts
 import XMonad.Layout.Circle (Circle (..))
 import XMonad.Layout.Column
 import XMonad.Layout.Grid
@@ -19,9 +25,11 @@ import XMonad.Layout.Roledex
 import XMonad.Layout.Spacing (Border (..), spacingRaw)
 import XMonad.Layout.Tabbed
 import XMonad.Layout.ThreeColumns
+-- Prompts
 import XMonad.Prompt.Input
 import XMonad.Prompt.XMonad
 import qualified XMonad.StackSet as W
+-- Util
 import XMonad.Util.EZConfig
 import XMonad.Util.Loggers
 import XMonad.Util.Run (spawnPipe)
