@@ -9,6 +9,7 @@ import System.IO
 import XMonad
 -- Actions
 import XMonad.Actions.CycleWS ()
+import XMonad.Actions.DynamicProjects
 import XMonad.Actions.GridSelect
 import XMonad.Actions.TreeSelect
 -- Hooks
@@ -84,6 +85,15 @@ myFadeHook =
       (className =? "Firefox") <&&> (isUnfocused) --> opacity 0.9,
       (className =? "discord") <&&> (isUnfocused) --> opacity 1
     ]
+
+myProjects =
+  [ Project
+      { projectName = "chat",
+        projectDirectory = "~/",
+        projectStartHook = Just $ do
+          spawn "Discord"
+      }
+  ]
 
 -- Main
 main :: IO ()
