@@ -74,7 +74,7 @@ tall = Tall 1 (3 / 100) (1 / 2)
 
 column = Column (10 / 7)
 
-defaultLayout = spacing $ tall ||| Full ||| column
+defaultLayout = avoidStruts $ spacing $ tall ||| Full ||| column
 
 -- Projects
 myFadeHook =
@@ -108,7 +108,12 @@ main = do
           manageHook = manageDocks <+> manageHook def,
           workspaces = toWorkspaces myWorkspaces,
           layoutHook = defaultLayout,
-          handleEventHook = handleEventHook def <+> docksEventHook <+> fadeWindowsEventHook,
+          handleEventHook =
+            composeAll
+              [ handleEventHook def,
+                docksEventHook,
+                fadeWindowsEventHook
+              ],
           borderWidth = 1,
           terminal = "urxvt",
           normalBorderColor = "#264653",
