@@ -43,7 +43,8 @@ myWorkspaces =
     "chat",
     "play",
     "build",
-    "work"
+    "work",
+    "music"
   ]
 
 -- Keybindings
@@ -98,6 +99,13 @@ myProjects =
         projectStartHook = Just $ do
           spawn "firefox -P work"
           spawn "urxvt -title 'work terminal'"
+      },
+    Project
+      { projectName = "music",
+        projectDirectory = "~/music",
+        projectStartHook = Just $ do
+          spawn "urxvt -e mpdas"
+          spawn "urxvt -e ncmpcpp"
       },
     Project
       { projectName = "browse",
