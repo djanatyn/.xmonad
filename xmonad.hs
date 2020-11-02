@@ -37,15 +37,13 @@ import XMonad.Util.Run (spawnPipe)
 import XMonad.Util.Themes
 import XMonad.Util.WorkspaceCompare
 
-myWorkspaces :: Forest String
 myWorkspaces =
-  [ Node "home" [],
-    Node "browse" [],
-    Node "chat" [],
-    Node "code" [],
-    Node "game" [],
-    Node "work" [],
-    Node "music" []
+  [ "chaos",
+    "browse",
+    "chat",
+    "play",
+    "build",
+    "work"
   ]
 
 -- Keybindings
