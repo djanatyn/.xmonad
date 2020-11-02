@@ -22,6 +22,7 @@ import XMonad.Hooks.WorkspaceHistory ()
 import XMonad.Layout.Circle (Circle (..))
 import XMonad.Layout.Column
 import XMonad.Layout.Grid
+import XMonad.Layout.PerWorkspace (onWorkspace)
 import XMonad.Layout.Roledex
 import XMonad.Layout.Spacing (Border (..), spacingRaw)
 import XMonad.Layout.Tabbed
@@ -74,7 +75,15 @@ tall = Tall 1 (3 / 100) (1 / 2)
 
 column = Column (10 / 7)
 
-defaultLayout = avoidStruts $ spacing $ tall ||| Full ||| column
+mediaLayout = avoidStruts $ spacing $ Column 3
+
+defaultLayout = tall ||| Full ||| column
+
+myLayout =
+  avoidStruts $
+    spacing $
+      onWorkspace "music" mediaLayout $
+        defaultLayout
 
 -- Fade
 myFadeHook =
@@ -146,7 +155,7 @@ defaults xmobarProc =
           ],
       manageHook = manageDocks <+> manageHook def,
       workspaces = myWorkspaces,
-      layoutHook = defaultLayout,
+      layoutHook = myLayout,
       handleEventHook =
         composeAll
           [ handleEventHook def,
