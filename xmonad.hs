@@ -46,7 +46,8 @@ myWorkspaces =
     "play",
     "build",
     "work",
-    "music"
+    "music",
+    "twitter"
   ]
 
 -- PulseAudio Headset
@@ -113,7 +114,8 @@ myLayout =
   avoidStruts $
     spacing $
       onWorkspace "music" mediaLayout $
-        defaultLayout
+        onWorkspace "twitter" Full $
+          defaultLayout
 
 -- Fade
 myFadeHook =
@@ -155,6 +157,12 @@ myProjects =
         projectDirectory = "~/",
         projectStartHook = Just $ do
           spawn "firefox -P default"
+      },
+    Project
+      { projectName = "twitter",
+        projectDirectory = "~/",
+        projectStartHook = Just $ do
+          spawn "surf tweetdeck.twitter.com"
       }
   ]
 
