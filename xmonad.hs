@@ -107,7 +107,7 @@ tall = Tall 1 (3 / 100) (1 / 2)
 
 column = Column (10 / 7)
 
-mediaLayout = avoidStruts $ spacing $ Column 3
+mediaLayout = Column 3
 
 defaultLayout = tall ||| Full ||| column
 
