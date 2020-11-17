@@ -56,14 +56,26 @@ myWorkspaces =
 headsetSink = "alsa_input.usb-Logitech_G533_Gaming_Headset-00.mono-fallback"
 
 -- Scratchpads
-myScratchPads = [NS "mixer" spawnMixer findMixer manageMixer]
+myScratchPads =
+  [ NS "mixer" spawnMixer findMixer manageMixer,
+    NS "clock" spawnClock findClock manageClock
+  ]
   where
-    spawnMixer = "urxvt -name Pulsemixer -e pulsemixer" -- launch pulsemixer
+    spawnMixer = "urxvt -title Pulsemixer -e pulsemixer" -- launch pulsemixer
     findMixer = resource =? "Pulsemixer" -- its window will be named "pulsemixer"
     manageMixer = customFloating $ W.RationalRect l t w h -- and the geometry:
       where
         h = 0.2
         w = 0.8
+        t = 0.5 - (h / 2)
+        l = 0.5 - (w / 2)
+
+    spawnClock = "urxvt -name peaclock -e peaclock"
+    findClock = resource =? "peaclock"
+    manageClock = customFloating $ W.RationalRect l t w h -- and the geometry:
+      where
+        h = 0.5
+        w = 0.5
         t = 0.5 - (h / 2)
         l = 0.5 - (w / 2)
 
@@ -91,7 +103,8 @@ extraKeys =
         ((mod1Mask, xF86XK_Launch5), spawn $ "pactl set-source-mute " ++ headsetSink ++ " 0")
       ],
       [ -- Scratchpad
-        ((mod1Mask, xK_m), namedScratchpadAction myScratchPads "mixer")
+        ((mod1Mask, xK_m), namedScratchpadAction myScratchPads "mixer"),
+        ((mod1Mask, xK_c), namedScratchpadAction myScratchPads "clock")
       ]
     ]
 
