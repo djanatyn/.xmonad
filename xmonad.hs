@@ -41,15 +41,15 @@ import XMonad.Util.Themes
 import XMonad.Util.WorkspaceCompare
 
 myWorkspaces =
-  [ "chaos",
-    "browse",
+  [ "build",
     "chat",
     "play",
-    "build",
-    "work",
     "music",
     "feed",
-    "twitter"
+    "twitter",
+    "work",
+    "browse",
+    "chaos"
   ]
 
 -- PulseAudio Headset
