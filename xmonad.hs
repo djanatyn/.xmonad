@@ -47,6 +47,7 @@ myWorkspaces =
     "build",
     "work",
     "music",
+    "feed",
     "twitter"
   ]
 
@@ -163,6 +164,12 @@ myProjects =
         projectDirectory = "~/",
         projectStartHook = Just $ do
           spawn "surf tweetdeck.twitter.com"
+      },
+    Project
+      { projectName = "feed",
+        projectDirectory = "~/",
+        projectStartHook = Just $ do
+          spawn "surf 10.100.0.1:8080"
       }
   ]
 
