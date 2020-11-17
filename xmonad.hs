@@ -29,6 +29,7 @@ import XMonad.Layout.Tabbed
 import XMonad.Layout.ThreeColumns
 -- Prompts
 import XMonad.Prompt.Input
+import XMonad.Prompt.Workspace
 import XMonad.Prompt.XMonad
 import qualified XMonad.StackSet as W
 -- Util
@@ -72,7 +73,8 @@ extraKeys =
   foldr1
     (++)
     [ [ -- Workspace Navigation
-        ((mod1Mask, xK_f), gridselectWorkspace def W.greedyView),
+        ((mod1Mask, xK_f), workspacePrompt def (windows . W.greedyView)),
+        -- ((mod1Mask, xK_f), gridselectWorkspace def W.greedyView),
         ((mod1Mask .|. shiftMask, xK_f), bringSelected def)
       ],
       [ -- Spawn Programs
