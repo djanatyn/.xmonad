@@ -29,6 +29,7 @@ import XMonad.Layout.Tabbed
 import XMonad.Layout.ThreeColumns
 -- Prompts
 import XMonad.Prompt.Input
+import XMonad.Prompt.Pass
 import XMonad.Prompt.Workspace
 import XMonad.Prompt.XMonad
 import qualified XMonad.StackSet as W
@@ -104,6 +105,10 @@ extraKeys =
       ],
       [ -- Scratchpad
         ((mod1Mask, xK_m), namedScratchpadAction myScratchPads "mixer"),
+        ((mod1Mask, xK_c), namedScratchpadAction myScratchPads "clock")
+      ],
+      [ -- XMonad.Prompt.Pass
+        ((mod1Mask .|. controlMask, xK_p), passPrompt def),
         ((mod1Mask, xK_c), namedScratchpadAction myScratchPads "clock")
       ]
     ]
