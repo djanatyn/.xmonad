@@ -145,6 +145,8 @@ myFadeHook =
       -- Unfocused windows are transparent
       isUnfocused --> opacity 0.75,
       -- Leave Firefox mostly opaque
+      className =? "Emacs-27.1" --> opacity 0.9,
+      -- Leave Firefox mostly opaque
       (className =? "Firefox") <&&> (isUnfocused) --> opacity 0.9,
       -- Increased opacity for floating Discord windows
       (className =? "discord") <&&> (not <$> isFloating) --> opacity 0.95,
