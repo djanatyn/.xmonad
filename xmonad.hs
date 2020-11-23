@@ -54,7 +54,8 @@ myWorkspaces =
   ]
 
 -- PulseAudio Headset
-headsetSink = "alsa_input.usb-Logitech_G533_Gaming_Headset-00.mono-fallback"
+-- headsetSink = "alsa_input.usb-Logitech_G533_Gaming_Headset-00.mono-fallback"
+headsetSink = "alsa_input.pci-0000_0b_00.4.analog-stereo"
 
 -- Scratchpads
 myScratchPads =
