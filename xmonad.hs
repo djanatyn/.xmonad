@@ -63,7 +63,7 @@ myScratchPads =
     NS "clock" spawnClock findClock manageClock
   ]
   where
-    spawnMixer = "urxvt -title Pulsemixer -e pulsemixer" -- launch pulsemixer
+    spawnMixer = "urxvt -title Pulsemixer -name Pulsemixer -e pulsemixer" -- launch pulsemixer
     findMixer = resource =? "Pulsemixer" -- its window will be named "pulsemixer"
     manageMixer = customFloating $ W.RationalRect l t w h -- and the geometry:
       where
@@ -72,7 +72,7 @@ myScratchPads =
         t = 0.5 - (h / 2)
         l = 0.5 - (w / 2)
 
-    spawnClock = "urxvt -name peaclock -e peaclock"
+    spawnClock = "urxvt -title peaclock -name peaclock -e peaclock"
     findClock = resource =? "peaclock"
     manageClock = customFloating $ W.RationalRect l t w h -- and the geometry:
       where
