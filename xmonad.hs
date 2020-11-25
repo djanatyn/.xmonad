@@ -100,6 +100,10 @@ extraKeys =
       [ -- XMonad Config
         ((mod1Mask .|. shiftMask, xK_t), sendMessage ToggleStruts)
       ],
+      [ -- Screenshots
+        ((mod1Mask, xK_s), screenshot),
+        ((mod1Mask .|. shiftMask, xK_s), screenshotWindow)
+      ],
       [ -- Headset Controls
         ((mod1Mask, xF86XK_Tools), spawn $ "pactl set-source-mute" ++ headsetSink ++ " 1"),
         ((mod1Mask, xF86XK_Launch5), spawn $ "pactl set-source-mute " ++ headsetSink ++ " 0")
@@ -113,6 +117,22 @@ extraKeys =
         ((mod1Mask, xK_c), namedScratchpadAction myScratchPads "clock")
       ]
     ]
+
+screenshot :: X ()
+screenshot = inputPrompt def "screenshot name?" >>= launch
+  where
+    launch (Just name) = spawn $ "maim -s " ++ name
+    launch Nothing = return ()
+
+screenshotWindow = inputPrompt def "screenshot name?" >>= launch
+  where
+    padding = "20"
+    delay = "3"
+
+    launch (Just name) =
+      spawn $
+        "maim -s -p " ++ padding ++ " -d " ++ delay ++ " -B " ++ name
+    launch Nothing = return ()
 
 -- Prompt for terminal names
 namedTerminal :: X ()
