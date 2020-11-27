@@ -212,7 +212,7 @@ myProjects =
       { projectName = "feed",
         projectDirectory = "~/",
         projectStartHook = Just $ do
-          spawn "surf 10.100.0.1:8080"
+          spawn "surf -z 1.35 10.100.0.1:8080"
       }
   ]
 
