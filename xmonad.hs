@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 -- TODO: navigate window layouts with gridselect
 
 -- Base
@@ -55,9 +57,11 @@ myWorkspaces =
 
 -- PulseAudio Headset
 -- headsetSink = "alsa_input.usb-Logitech_G533_Gaming_Headset-00.mono-fallback"
+headsetSink :: String
 headsetSink = "alsa_input.pci-0000_0b_00.4.analog-stereo"
 
 -- Scratchpads
+myScratchPads :: [NamedScratchpad]
 myScratchPads =
   [ NS "mixer" spawnMixer findMixer manageMixer,
     NS "clock" spawnClock findClock manageClock
@@ -124,6 +128,7 @@ screenshot = inputPrompt def "screenshot name?" >>= launch
     launch (Just name) = spawn $ "maim -s " ++ name
     launch Nothing = return ()
 
+screenshotWindow :: X ()
 screenshotWindow = inputPrompt def "screenshot name?" >>= launch
   where
     padding = "20"
@@ -160,6 +165,7 @@ myLayout =
           defaultLayout
 
 -- Fade
+myFadeHook :: FadeHook
 myFadeHook =
   composeAll
     [ opaque,
@@ -175,6 +181,7 @@ myFadeHook =
     ]
 
 -- Projects
+myProjects :: [Project]
 myProjects =
   [ Project
       { projectName = "chat",
@@ -183,7 +190,8 @@ myProjects =
           spawn "Discord"
       },
     Project
-      { projectName = "work",
+      { projectName =
+          "work",
         projectDirectory = "~/",
         projectStartHook = Just $ do
           spawn "firefox -P work"
@@ -216,9 +224,11 @@ myProjects =
       }
   ]
 
+startupProcs :: [String]
 startupProcs =
   [ "nitrogen --restore",
     "compton",
+    "~/.screenlayouts/default.sh",
     "fluxgui"
   ]
 
