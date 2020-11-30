@@ -109,8 +109,7 @@ extraKeys =
         ((mod1Mask .|. shiftMask, xK_s), screenshotWindow)
       ],
       [ -- Headset Controls
-        ((mod1Mask, xF86XK_Tools), spawn $ "pactl set-source-mute" ++ headsetSink ++ " 1"),
-        ((mod1Mask, xF86XK_Launch5), spawn $ "pactl set-source-mute " ++ headsetSink ++ " 0")
+        ((mod1Mask, xF86XK_AudioPlay), spawn $ "pactl set-source-mute " ++ headsetSink ++ " toggle")
       ],
       [ -- Scratchpad
         ((mod1Mask, xK_m), namedScratchpadAction myScratchPads "mixer"),
