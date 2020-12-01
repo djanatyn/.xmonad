@@ -30,8 +30,10 @@ import XMonad.Layout.Spacing (Border (..), spacingRaw)
 import XMonad.Layout.Tabbed
 import XMonad.Layout.ThreeColumns
 -- Prompts
+import XMonad.Prompt (XPConfig (..))
 import XMonad.Prompt.Input
 import XMonad.Prompt.Pass
+import XMonad.Prompt.Unicode
 import XMonad.Prompt.Workspace
 import XMonad.Prompt.XMonad
 import qualified XMonad.StackSet as W
@@ -115,7 +117,8 @@ extraKeys =
         ((mod1Mask, xK_m), namedScratchpadAction myScratchPads "mixer"),
         ((mod1Mask, xK_c), namedScratchpadAction myScratchPads "clock")
       ],
-      [ -- XMonad.Prompt.Pass
+      [ -- XMonad.Prompt
+        ((mod1Mask .|. controlMask, xK_o), unicodePrompt "/home/djanatyn/UnicodeData.txt" (def {font = "xft:Noto Color Emoji"})),
         ((mod1Mask .|. controlMask, xK_p), passPrompt def),
         ((mod1Mask, xK_c), namedScratchpadAction myScratchPads "clock")
       ]
