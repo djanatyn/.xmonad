@@ -66,7 +66,8 @@ headsetSink = "alsa_input.pci-0000_0b_00.4.analog-stereo"
 myScratchPads :: [NamedScratchpad]
 myScratchPads =
   [ NS "mixer" spawnMixer findMixer manageMixer,
-    NS "clock" spawnClock findClock manageClock
+    NS "clock" spawnClock findClock manageClock,
+    NS "twitter" spawnTwitter findTwitter manageTwitter
   ]
   where
     spawnMixer = "urxvt -title Pulsemixer -name Pulsemixer -e pulsemixer" -- launch pulsemixer
@@ -87,6 +88,15 @@ myScratchPads =
         t = 0.5 - (h / 2)
         l = 0.5 - (w / 2)
 
+    spawnTwitter = "urxvt -title twitter -name twitter -e nix run -f '<nixpkgs>' -I ~/repos python38Packages.rainbowstream -c rainbowstream -to 120"
+    findTwitter = resource =? "twitter"
+    manageTwitter = customFloating $ W.RationalRect l t w h -- and the geometry:
+      where
+        h = 0.8
+        w = 0.8
+        t = 0.5 - (h / 2)
+        l = 0.5 - (w / 2)
+
 -- Keybindings
 extraKeys :: [((KeyMask, KeySym), X ())]
 extraKeys =
@@ -94,8 +104,9 @@ extraKeys =
     (++)
     [ [ -- Workspace Navigation
         ((mod1Mask, xK_f), workspacePrompt def (windows . W.greedyView)),
+        ((mod1Mask .|. shiftMask, xK_f), workspacePrompt def (windows . W.shift))
         -- ((mod1Mask, xK_f), gridselectWorkspace def W.greedyView),
-        ((mod1Mask .|. shiftMask, xK_f), bringSelected def)
+        -- ((mod1Mask .|. shiftMask, xK_f), bringSelected def)
       ],
       [ -- Spawn Programs
         ((mod1Mask .|. shiftMask, xK_Return), namedTerminal),
@@ -111,11 +122,14 @@ extraKeys =
         ((mod1Mask .|. shiftMask, xK_s), screenshotWindow)
       ],
       [ -- Headset Controls
+        ((mod1Mask, xF86XK_Tools), spawn $ "pactl set-source-mute" ++ headsetSink ++ " 1"),
+        ((mod1Mask, xF86XK_Launch5), spawn $ "pactl set-source-mute " ++ headsetSink ++ " 0"),
         ((mod1Mask, xF86XK_AudioPlay), spawn $ "pactl set-source-mute " ++ headsetSink ++ " toggle")
       ],
       [ -- Scratchpad
         ((mod1Mask, xK_m), namedScratchpadAction myScratchPads "mixer"),
-        ((mod1Mask, xK_c), namedScratchpadAction myScratchPads "clock")
+        ((mod1Mask, xK_c), namedScratchpadAction myScratchPads "clock"),
+        ((mod1Mask, xK_t), namedScratchpadAction myScratchPads "twitter")
       ],
       [ -- XMonad.Prompt
         ((mod1Mask .|. controlMask, xK_o), unicodePrompt "/home/djanatyn/UnicodeData.txt" (def {font = "xft:Noto Color Emoji"})),
@@ -171,15 +185,10 @@ myFadeHook :: FadeHook
 myFadeHook =
   composeAll
     [ opaque,
-      -- Unfocused windows are transparent
-      isUnfocused --> opacity 0.75,
-      -- Leave Firefox mostly opaque
-      className =? "Emacs-27.1" --> opacity 0.95,
-      -- Leave Firefox completely opaque
-      (className =? "Nightly") <&&> (isUnfocused) --> opacity 1,
-      -- Increased opacity for floating Discord windows
-      (className =? "discord") <&&> (not <$> isFloating) --> opacity 0.95,
-      (className =? "discord") <&&> (isFloating) --> opacity 0.75
+      -- unfocused windows are no longer transparent
+      isUnfocused --> opacity 1,
+      -- Leave emacs mostly opaque
+      className =? "Emacs-27.1" --> opacity 0.95
     ]
 
 -- Projects
