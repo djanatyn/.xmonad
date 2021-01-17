@@ -129,7 +129,7 @@ extraKeys =
       [ -- Scratchpad
         ((mod1Mask, xK_m), namedScratchpadAction myScratchPads "mixer"),
         ((mod1Mask, xK_c), namedScratchpadAction myScratchPads "clock"),
-        ((mod1Mask, xK_t), namedScratchpadAction myScratchPads "twitter")
+        ((mod1Mask .|. controlMask, xK_t), namedScratchpadAction myScratchPads "twitter")
       ],
       [ -- XMonad.Prompt
         ((mod1Mask .|. controlMask, xK_o), unicodePrompt "/home/djanatyn/UnicodeData.txt" (def {font = "xft:Noto Color Emoji"})),
@@ -188,7 +188,7 @@ myFadeHook =
       -- unfocused windows are no longer transparent
       isUnfocused --> opacity 1,
       -- Leave emacs mostly opaque
-      className =? "Emacs-27.1" --> opacity 0.95
+      className =? "Emacs-27.1" --> opacity 0.9
     ]
 
 -- Projects
