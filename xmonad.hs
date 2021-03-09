@@ -103,8 +103,7 @@ extraKeys =
   foldr1
     (++)
     [ [ -- Workspace Navigation
-        ((mod1Mask, xK_f), workspacePrompt def (windows . W.greedyView)),
-        ((mod1Mask .|. shiftMask, xK_f), workspacePrompt def (windows . W.shift))
+        ((mod1Mask, xK_f), spawn "rofi -show window -theme 'Arc-Dark'")
         -- ((mod1Mask, xK_f), gridselectWorkspace def W.greedyView),
         -- ((mod1Mask .|. shiftMask, xK_f), bringSelected def)
       ],
@@ -192,48 +191,48 @@ myFadeHook =
     ]
 
 -- Projects
-myProjects :: [Project]
-myProjects =
-  [ Project
-      { projectName = "chat",
-        projectDirectory = "~/",
-        projectStartHook = Just $ do
-          spawn "Discord"
-      },
-    Project
-      { projectName =
-          "work",
-        projectDirectory = "~/",
-        projectStartHook = Just $ do
-          spawn "firefox -P work"
-          spawn "urxvt -title 'work terminal'"
-      },
-    Project
-      { projectName = "music",
-        projectDirectory = "~/music",
-        projectStartHook = Just $ do
-          spawn "urxvt -e mpdas"
-          spawn "urxvt -e ncmpcpp"
-      },
-    Project
-      { projectName = "browse",
-        projectDirectory = "~/",
-        projectStartHook = Just $ do
-          spawn "firefox -P default"
-      },
-    Project
-      { projectName = "twitter",
-        projectDirectory = "~/",
-        projectStartHook = Just $ do
-          spawn "surf tweetdeck.twitter.com"
-      },
-    Project
-      { projectName = "feed",
-        projectDirectory = "~/",
-        projectStartHook = Just $ do
-          spawn "surf -z 1.35 10.100.0.1:8080"
-      }
-  ]
+-- myProjects :: [Project]
+-- myProjects =
+--   [ Project
+--       { projectName = "chat",
+--         projectDirectory = "~/",
+--         projectStartHook = Just $ do
+--           spawn "Discord"
+--       },
+--     Project
+--       { projectName =
+--           "work",
+--         projectDirectory = "~/",
+--         projectStartHook = Just $ do
+--           spawn "firefox -P work"
+--           spawn "urxvt -title 'work terminal'"
+--       },
+--     Project
+--       { projectName = "music",
+--         projectDirectory = "~/music",
+--         projectStartHook = Just $ do
+--           spawn "urxvt -e mpdas"
+--           spawn "urxvt -e ncmpcpp"
+--       },
+--     Project
+--       { projectName = "browse",
+--         projectDirectory = "~/",
+--         projectStartHook = Just $ do
+--           spawn "firefox -P default"
+--       },
+--     Project
+--       { projectName = "twitter",
+--         projectDirectory = "~/",
+--         projectStartHook = Just $ do
+--           spawn "surf tweetdeck.twitter.com"
+--       },
+--     Project
+--       { projectName = "feed",
+--         projectDirectory = "~/",
+--         projectStartHook = Just $ do
+--           spawn "surf -z 1.35 10.100.0.1:8080"
+--       }
+--   ]
 
 startupProcs :: [String]
 startupProcs =
@@ -250,9 +249,9 @@ main = do
   spawn `traverse` startupProcs
   xmonad $
     ewmh $
-      dynamicProjects myProjects $
-        (defaults xmobarProc)
-          `additionalKeys` extraKeys
+      -- dynamicProjects myProjects $
+      (defaults xmobarProc)
+        `additionalKeys` extraKeys
 
 defaults xmobarProc =
   def
@@ -267,7 +266,7 @@ defaults xmobarProc =
                 }
           ],
       manageHook = manageDocks <+> manageHook def <+> namedScratchpadManageHook myScratchPads,
-      workspaces = myWorkspaces,
+      -- workspaces = myWorkspaces,
       layoutHook = myLayout,
       handleEventHook =
         composeAll
