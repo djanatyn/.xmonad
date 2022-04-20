@@ -67,8 +67,7 @@ headsetSink = "alsa_input.pci-0000_0b_00.4.analog-stereo"
 myScratchPads :: [NamedScratchpad]
 myScratchPads =
   [ NS "mixer" spawnMixer findMixer manageMixer,
-    NS "clock" spawnClock findClock manageClock,
-    NS "twitter" spawnTwitter findTwitter manageTwitter
+    NS "popup" spawnPopup findPopup managePopup
   ]
   where
     spawnMixer = "urxvt -title Pulsemixer -name Pulsemixer -e pulsemixer" -- launch pulsemixer
@@ -80,23 +79,15 @@ myScratchPads =
         t = 0.5 - (h / 2)
         l = 0.5 - (w / 2)
 
-    spawnClock = "urxvt -title tmux -name popup"
-    findClock = resource =? "popup"
-    manageClock = customFloating $ W.RationalRect l t w h -- and the geometry:
+    spawnPopup = "urxvt -title tmux -name popup"
+    findPopup = resource =? "popup"
+    managePopup = customFloating $ W.RationalRect l t w h -- and the geometry:
       where
         h = 0.7
         w = 0.7
         t = 0.5 - (h / 2)
         l = 0.5 - (w / 2)
 
-    spawnTwitter = "urxvt -title twitter -name twitter -e nix run -f '<nixpkgs>' -I ~/repos python38Packages.rainbowstream -c rainbowstream -to 120"
-    findTwitter = resource =? "twitter"
-    manageTwitter = customFloating $ W.RationalRect l t w h -- and the geometry:
-      where
-        h = 0.8
-        w = 0.8
-        t = 0.5 - (h / 2)
-        l = 0.5 - (w / 2)
 
 -- Keybindings
 extraKeys :: [((KeyMask, KeySym), X ())]
@@ -131,8 +122,7 @@ extraKeys =
       ],
       [ -- Scratchpad
         ((mod1Mask, xK_m), namedScratchpadAction myScratchPads "mixer"),
-        ((mod1Mask, xK_c), namedScratchpadAction myScratchPads "clock"),
-        ((mod1Mask .|. controlMask, xK_t), namedScratchpadAction myScratchPads "twitter")
+        ((mod1Mask, xK_c), namedScratchpadAction myScratchPads "popup")
       ],
       [ -- XMonad.Prompt
         ((mod1Mask .|. controlMask, xK_o), unicodePrompt "/home/djanatyn/UnicodeData.txt" (def {font = "xft:Noto Color Emoji"})),
