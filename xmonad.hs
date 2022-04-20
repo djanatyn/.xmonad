@@ -38,10 +38,11 @@ import XMonad.Prompt.Workspace
 import XMonad.Prompt.XMonad
 import qualified XMonad.StackSet as W
 -- Util
+import XMonad.Util.Paste
 import XMonad.Util.EZConfig
 import XMonad.Util.Loggers
 import XMonad.Util.NamedScratchpad
-import XMonad.Util.Run (spawnPipe)
+import XMonad.Util.Run 
 import XMonad.Util.Themes
 import XMonad.Util.WorkspaceCompare
 
@@ -79,12 +80,12 @@ myScratchPads =
         t = 0.5 - (h / 2)
         l = 0.5 - (w / 2)
 
-    spawnClock = "urxvt -title peaclock -name peaclock -e peaclock"
-    findClock = resource =? "peaclock"
+    spawnClock = "urxvt -title tmux -name popup"
+    findClock = resource =? "popup"
     manageClock = customFloating $ W.RationalRect l t w h -- and the geometry:
       where
-        h = 0.5
-        w = 0.5
+        h = 0.7
+        w = 0.7
         t = 0.5 - (h / 2)
         l = 0.5 - (w / 2)
 
@@ -120,6 +121,9 @@ extraKeys =
         ((mod1Mask, xK_s), screenshot),
         ((mod1Mask .|. shiftMask, xK_s), screenshotWindow)
       ],
+      [ -- Date
+        ((mod1Mask, xK_d), insertDate)
+      ],
       [ -- Headset Controls
         ((mod1Mask, xF86XK_Tools), spawn $ "pactl set-source-mute" ++ headsetSink ++ " 1"),
         ((mod1Mask, xF86XK_Launch5), spawn $ "pactl set-source-mute " ++ headsetSink ++ " 0"),
@@ -136,6 +140,15 @@ extraKeys =
         ((mod1Mask, xK_c), namedScratchpadAction myScratchPads "clock")
       ]
     ]
+
+insertDate :: X ()
+insertDate = inputPrompt def "date?" >>= launch
+  where
+    launch (Just date) = 
+      let cmd = "date -d '" ++ date ++ "' --rfc-3339=seconds | perl -pe 's/ /T/'" in do
+        timestamp <- runProcessWithInput "bash" ["-c", cmd] ""
+        pasteString $ "<time:" ++ timestamp ++ ">"
+    launch Nothing = return ()
 
 screenshot :: X ()
 screenshot = inputPrompt def "screenshot name?" >>= launch
@@ -170,7 +183,7 @@ column = Column (10 / 7)
 
 mediaLayout = Column 3
 
-defaultLayout = tall ||| Full ||| column
+defaultLayout = tall ||| Full ||| column ||| ThreeCol 1 (3/100) (1/2)
 
 myLayout =
   avoidStruts $
@@ -186,8 +199,13 @@ myFadeHook =
     [ opaque,
       -- unfocused windows are no longer transparent
       isUnfocused --> opacity 1,
+      isUnfocused --> opacity 1,
       -- Leave emacs mostly opaque
-      className =? "Emacs-27.1" --> opacity 0.9
+      resource =? "popup" --> opacity 0.9,
+      className =? "Emacs-27.1" --> opacity 0.9,
+      className =? "webex" --> opacity 0.9,
+      className =? "Firefox" --> opacity 1,
+      className =? "explorer.exe" --> opacity 1
     ]
 
 -- Projects
