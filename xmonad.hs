@@ -21,6 +21,7 @@ import XMonad.Hooks.FadeWindows
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.WorkspaceHistory ()
 -- Layouts
+import XMonad.Layout.Gaps
 import XMonad.Layout.Circle (Circle (..))
 import XMonad.Layout.Column
 import XMonad.Layout.Grid
@@ -176,11 +177,7 @@ mediaLayout = Column 3
 defaultLayout = tall ||| Full ||| column ||| ThreeCol 1 (3/100) (1/2)
 
 myLayout =
-  avoidStruts $
-    spacing $
-      onWorkspace "music" mediaLayout $
-        onWorkspace "twitter" Full $
-          defaultLayout
+  avoidStruts $ spacing $ gaps' [((L, 300), True), ((R, 300), True)] defaultLayout
 
 -- Fade
 myFadeHook :: FadeHook
