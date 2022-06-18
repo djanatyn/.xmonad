@@ -104,7 +104,7 @@ extraKeys =
         ((mod1Mask .|. shiftMask, xK_Return), namedTerminal),
         ((mod1Mask, xK_p), spawn "rofi -show run -theme 'Arc-Dark'"),
         ((mod1Mask .|. shiftMask, xK_p), spawn "rofi -show window -theme 'Arc-Dark'"),
-        ((mod1Mask, xK_g), spawn "eidolon list | tail -n +3 | rofi -dmenu -theme darker_than_black | cut -d '-' -f 2 | xargs eidolon run")
+        ((mod1Mask, xK_g), sendMessage ToggleGaps)
       ],
       [ -- XMonad Config
         ((mod1Mask .|. shiftMask, xK_t), sendMessage ToggleStruts)
@@ -177,7 +177,7 @@ mediaLayout = Column 3
 defaultLayout = tall ||| Full ||| column ||| ThreeCol 1 (3/100) (1/2)
 
 myLayout =
-  avoidStruts $ spacing $ gaps' [((L, 300), True), ((R, 300), True)] defaultLayout
+  avoidStruts $ spacing $ gaps' [((L, 400), True), ((R, 400), True)] defaultLayout
 
 -- Fade
 myFadeHook :: FadeHook
