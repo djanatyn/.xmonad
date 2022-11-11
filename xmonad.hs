@@ -144,18 +144,13 @@ insertDate = inputPrompt def "date?" >>= launch
 screenshot :: X ()
 screenshot = inputPrompt def "screenshot name?" >>= launch
   where
-    launch (Just name) = spawn $ "maim -s " ++ name
+    launch (Just name) = spawn $ unwords ["/home/djanatyn/.xmonad/screenshot.sh", name]
     launch Nothing = return ()
 
 screenshotWindow :: X ()
 screenshotWindow = inputPrompt def "screenshot name?" >>= launch
   where
-    padding = "20"
-    delay = "3"
-
-    launch (Just name) =
-      spawn $
-        "maim -s -p " ++ padding ++ " -d " ++ delay ++ " -B " ++ name
+    launch (Just name) = spawn $ unwords ["/home/djanatyn/.xmonad/screenshot-window.sh", name]
     launch Nothing = return ()
 
 -- Prompt for terminal names
