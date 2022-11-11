@@ -1,7 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
 
--- TODO: navigate window layouts with gridselect
-
 -- Base
 import Control.Monad (when)
 import Data.Maybe (isJust)
@@ -47,18 +45,6 @@ import XMonad.Util.Run
 import XMonad.Util.Themes
 import XMonad.Util.WorkspaceCompare
 
-myWorkspaces =
-  [ "build",
-    "chat",
-    "play",
-    "music",
-    "feed",
-    "twitter",
-    "work",
-    "browse",
-    "chaos"
-  ]
-
 -- PulseAudio Headset
 -- headsetSink = "alsa_input.usb-Logitech_G533_Gaming_Headset-00.mono-fallback"
 headsetSink :: String
@@ -97,8 +83,6 @@ extraKeys =
     (++)
     [ [ -- Workspace Navigation
         ((mod1Mask, xK_f), spawn "rofi -show window -theme 'Arc-Dark'")
-        -- ((mod1Mask, xK_f), gridselectWorkspace def W.greedyView),
-        -- ((mod1Mask .|. shiftMask, xK_f), bringSelected def)
       ],
       [ -- Spawn Programs
         ((mod1Mask .|. shiftMask, xK_Return), namedTerminal),
@@ -115,11 +99,6 @@ extraKeys =
       ],
       [ -- Date
         ((mod1Mask, xK_d), insertDate)
-      ],
-      [ -- Headset Controls
-        ((mod1Mask, xF86XK_Tools), spawn $ "pactl set-source-mute" ++ headsetSink ++ " 1"),
-        ((mod1Mask, xF86XK_Launch5), spawn $ "pactl set-source-mute " ++ headsetSink ++ " 0"),
-        ((mod1Mask, xF86XK_AudioPlay), spawn $ "pactl set-source-mute " ++ headsetSink ++ " toggle")
       ],
       [ -- Scratchpad
         ((mod1Mask, xK_m), namedScratchpadAction myScratchPads "mixer"),
@@ -190,49 +169,6 @@ myFadeHook =
       className =? "explorer.exe" --> opacity 1
     ]
 
--- Projects
--- myProjects :: [Project]
--- myProjects =
---   [ Project
---       { projectName = "chat",
---         projectDirectory = "~/",
---         projectStartHook = Just $ do
---           spawn "Discord"
---       },
---     Project
---       { projectName =
---           "work",
---         projectDirectory = "~/",
---         projectStartHook = Just $ do
---           spawn "firefox -P work"
---           spawn "urxvt -title 'work terminal'"
---       },
---     Project
---       { projectName = "music",
---         projectDirectory = "~/music",
---         projectStartHook = Just $ do
---           spawn "urxvt -e mpdas"
---           spawn "urxvt -e ncmpcpp"
---       },
---     Project
---       { projectName = "browse",
---         projectDirectory = "~/",
---         projectStartHook = Just $ do
---           spawn "firefox -P default"
---       },
---     Project
---       { projectName = "twitter",
---         projectDirectory = "~/",
---         projectStartHook = Just $ do
---           spawn "surf tweetdeck.twitter.com"
---       },
---     Project
---       { projectName = "feed",
---         projectDirectory = "~/",
---         projectStartHook = Just $ do
---           spawn "surf -z 1.35 10.100.0.1:8080"
---       }
---   ]
 
 startupProcs :: [String]
 startupProcs =
