@@ -242,7 +242,7 @@ myFadeHook =
 startupProcs :: [String]
 startupProcs =
   [ "nitrogen --restore",
-    "compton",
+    "picom",
     "~/.screenlayouts/default.sh",
     "fluxgui"
   ]
@@ -280,7 +280,7 @@ defaults xmobarProc =
             fadeWindowsEventHook
           ],
       borderWidth = 1,
-      terminal = "urxvt",
+      terminal = "kitty",
       normalBorderColor = "#264653",
       focusedBorderColor = "#2a9d8f",
       focusFollowsMouse = False
