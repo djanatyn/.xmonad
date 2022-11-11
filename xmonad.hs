@@ -162,7 +162,7 @@ screenshotWindow = inputPrompt def "screenshot name?" >>= launch
 namedTerminal :: X ()
 namedTerminal = inputPrompt def "terminal name?" >>= launch
   where
-    launch (Just name) = spawn $ "urxvt -title " ++ name
+    launch (Just name) = spawn $ "kitty --title " ++ name
     launch Nothing = return ()
 
 -- Layouts
